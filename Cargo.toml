@@ -1,0 +1,12 @@
+[package]
+name = "glcheck"
+version = "0.1.0"
+authors = ["Alexander Wauck <alex@impulse101.org>"]
+
+[dependencies]
+glutin = "*"
+gl_common = "0.1.0"
+libc = "0.2.1"
+
+[dependencies.gl]
+version = "0.1.0"
