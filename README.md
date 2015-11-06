@@ -1,7 +1,21 @@
-# glcheck
-Simple tool for checking if a machine supports the GL features you want
+# glchecklib
 
-The idea is that you compile this and give it to anybody who wants to see if they can run your program.
-If glcheck exits with code 0, their OpenGL setup is fine.  If not, then it's not.
+The only thing you really need to worry about in `glchecklib` is the `require_gl!` macro.
+This macro check that a GL context with the specified version, profile, robustness, and extensions can be created.
 
-Just change the call to `require_gl!` in `main()` to specify the version, core/compat, robustness, and extensions you want.
+For convenience (especially in `glcheckapp` and similar), `glchecklib` re-exports `GlProfile` and `Robustness` from `glutin`.
+
+# glcheckapp
+
+This is a simple app that uses `glchecklib` to check GL features.
+The idea is that you modify this app to check for the features your
+program needs.  You then compile it and distribute that compiled
+binary so that people can use it to check if they can run your program
+without needing to actually have your program.  After all, it's much
+faster to download a small executable than a 100MB+ demo.
+
+# Licensing
+
+`glchecklib` is LGPLv3+.
+
+`glcheckapp` is GPLv3+.  Why not LGPLv3+?  Because.

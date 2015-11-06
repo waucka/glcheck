@@ -1,4 +1,3 @@
-#[macro_use]
 extern crate glutin;
 extern crate gl;
 extern crate libc;
@@ -7,31 +6,25 @@ use gl::types::*;
 use std::ffi::CStr;
 use std::collections::HashSet;
 
-use glutin::{WindowBuilder, Window, GlRequest, Api, GlProfile, CreationError, Robustness};
+use glutin::{WindowBuilder, Window, GlRequest, Api, CreationError};
 
-fn build_window(gl_major_ver: u8, gl_minor_ver: u8, profile: GlProfile, robustness: Robustness) -> Result<Window, CreationError> {
-    WindowBuilder::new()
-        .with_gl(GlRequest::Specific(Api::OpenGl, (gl_major_ver, gl_minor_ver)))
-        .with_gl_profile(profile)
-        .with_gl_robustness(robustness)
-        .with_visibility(false)
-        .build_strict()
+pub use glutin::{GlProfile, Robustness};
+
+pub struct GLChecker {
+    pub major_ver: u8,
+    pub minor_ver: u8,
+    pub profile: GlProfile,
+    pub robustness: Robustness,
+    pub extensions: Vec<&'static str>,
 }
 
-struct GLChecker {
-    major_ver: u8,
-    minor_ver: u8,
-    profile: GlProfile,
-    robustness: Robustness,
-    extensions: Vec<&'static str>,
-}
-
+#[macro_export]
 macro_rules! require_gl {
     ($major_ver:expr, $minor_ver:expr, $profile:expr, $robustness:expr, $($extension:ident),+) => (
         {
             use std::process::exit;
 
-            let checker = GLChecker{
+            let checker = $crate::GLChecker{
                 major_ver: $major_ver,
                 minor_ver: $minor_ver,
                 profile: $profile,
@@ -166,6 +159,15 @@ impl GLChecker {
         return exts;
     }
 
+    fn build_window(self: &Self) -> Result<Window, CreationError> {
+        WindowBuilder::new()
+            .with_gl(GlRequest::Specific(Api::OpenGl, (self.major_ver, self.minor_ver)))
+            .with_gl_profile(self.profile)
+            .with_gl_robustness(self.robustness)
+            .with_visibility(false)
+            .build_strict()
+    }
+
     fn check_context(self: &Self, window: &Window) -> bool {
         unsafe {
             window.make_current().unwrap();
@@ -203,11 +205,11 @@ impl GLChecker {
         self.check_extensions(exts)
     }
 
-    fn check(self: &Self) -> bool {
+    pub fn check(self: &Self) -> bool {
         if !self.check_sanity() {
             return false;
         }
-        match build_window(self.major_ver, self.minor_ver, self.profile, self.robustness) {
+        match self.build_window() {
             Ok(window) =>  self.check_context(&window),
             Err(creation_error) => {
                 self.handle_creation_error(creation_error);
@@ -215,10 +217,4 @@ impl GLChecker {
             }
         }
     }
-}
-
-fn main() {
-    require_gl!{3, 3, GlProfile::Core, Robustness::NotRobust,
-                GL_ARB_texture_float};
-
 }

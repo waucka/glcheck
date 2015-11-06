@@ -1,11 +1,8 @@
 [root]
-name = "glcheck"
-version = "0.1.0"
+name = "glcheckapp"
+version = "1.0.0"
 dependencies = [
- "gl 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "gl_common 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "glutin 0.4.1 (registry+https://github.com/rust-lang/crates.io-index)",
- "libc 0.2.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "glchecklib 1.0.0",
 ]
 
 [[package]]
@@ -134,6 +131,16 @@ dependencies = [
  "khronos_api 0.0.8 (registry+https://github.com/rust-lang/crates.io-index)",
  "log 0.3.3 (registry+https://github.com/rust-lang/crates.io-index)",
  "xml-rs 0.1.26 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
+name = "glchecklib"
+version = "1.0.0"
+dependencies = [
+ "gl 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "gl_common 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "glutin 0.4.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "libc 0.2.1 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
