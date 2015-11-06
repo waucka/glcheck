@@ -22,8 +22,6 @@ pub struct GLChecker {
 macro_rules! require_gl {
     ($major_ver:expr, $minor_ver:expr, $profile:expr, $robustness:expr, $($extension:ident),+) => (
         {
-            use std::process::exit;
-
             let checker = $crate::GLChecker{
                 major_ver: $major_ver,
                 minor_ver: $minor_ver,
@@ -36,11 +34,7 @@ macro_rules! require_gl {
                         ],
             };
 
-            if checker.check() {
-                exit(0);
-            } else {
-                exit(1);
-            }
+            checker.check()
         }
         )
 }
